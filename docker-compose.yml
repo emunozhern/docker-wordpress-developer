@@ -1,0 +1,33 @@
+version: "3.7"
+
+volumes:
+    mariadb: {}
+
+services:
+  mariadb:
+    container_name: db
+    image: mariadb:10.2
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: emunoz
+      MYSQL_DATABASE: emunoz
+      MYSQL_USER: emunoz
+      MYSQL_PASSWORD: emunoz
+    volumes:
+    - mariadb:/var/lib/mysql
+
+  wordpress:
+    container_name: wp
+    image: wordpress
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      WORDPRESS_DB_HOST: mariadb
+      WORDPRESS_DB_USER: emunoz
+      WORDPRESS_DB_PASSWORD: emunoz
+      WORDPRESS_DB_NAME: emunoz
+    volumes:
+      - ./wp-content:/var/www/html/wp-content
+    depends_on:
+      - mariadb
